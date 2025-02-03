@@ -22,4 +22,8 @@ public class Task {
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
+
+    public String getTypeIcon() {
+        return "T";
+    }
 }
