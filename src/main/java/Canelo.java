@@ -1,81 +1,170 @@
 import java.util.Scanner;
 
 public class Canelo {
-    public static void main(String[] args) {
+    static Scanner input = new Scanner(System.in);
+    static int numTasks = 0;
+    static Task[] list = new Task[100];
+
+    static final String BY = "/by";
+    static final String FROM = "/from";
+    static final String TO = "/to";
+
+    static final String LINE = "____________________________________________________________";
+
+    private static void printStartMessage() {
+        System.out.println(LINE);
         System.out.println("""
-                ____________________________________________________________
                  Hello! I'm Canelo :)
-                 What can I do for you?
-                 ____________________________________________________________""");
-        Task[] list = new Task[100];
-        int numTasks = 0;
-        String line;
-        Scanner in = new Scanner(System.in);
-        line = in.nextLine();
-        while (!line.equals("bye")) {
-            System.out.println("____________________________________________________________");
-            String[] splitKeyboardInput = line.split(" ");
-            if (splitKeyboardInput.length == 0) {
-                continue;
-            } else if (splitKeyboardInput[0].equals("list") && splitKeyboardInput.length == 1) {
-                for (int i = 0; i < numTasks; i++) {
-                    int taskNumber = i + 1;
-                    System.out.println(taskNumber + ".[" + list[i].getTypeIcon() + "][" + list[i].getStatusIcon() + "] " + list[i].getDescription());
-                }
-            } else if (splitKeyboardInput[0].equals("mark") && splitKeyboardInput.length == 2&& isValidTaskNumber(Integer.parseInt(splitKeyboardInput[1]), numTasks)) {
-                Task task = list[Integer.parseInt(splitKeyboardInput[1]) - 1];
-                task.markDone();
-                System.out.println("Nice! I've marked this task as done:\n[X] " + task.getDescription());
-            } else if (splitKeyboardInput[0].equals("unmark") && splitKeyboardInput.length == 2 && isValidTaskNumber(Integer.parseInt(splitKeyboardInput[1]), numTasks)) {
-                Task task = list[Integer.parseInt(splitKeyboardInput[1]) - 1];
-                task.markNotDone();
-                System.out.println("OK, I've marked this task as not done yet:\n[ ] " + task.getDescription());
-            } else if (splitKeyboardInput[0].equals("todo") && splitKeyboardInput.length >= 2) {
-                Task task = new Task(line.substring(5));
-                numTasks = addTask(task, list, numTasks);
-                printTaskAdded(task, numTasks);
-            } else if (splitKeyboardInput[0].equals("deadline")) {
-                int indexOfBy = line.indexOf("/by");
-                if (indexOfBy != -1) {
-                    String deadlineName = line.substring(9, indexOfBy -1);
-                    String deadlineBy = line.substring(indexOfBy +4);
-                    Deadline deadline = new Deadline(deadlineName + " (by: " + deadlineBy + ")", deadlineBy);
-                    numTasks = addTask(deadline, list, numTasks);
-                    printTaskAdded(deadline, numTasks);
-                }
-            } else if (splitKeyboardInput[0].equals("event")) {
-                int indexOfFrom = line.indexOf("/from");
-                int indexOfTo = line.indexOf("/to");
-                if (indexOfFrom != -1 && indexOfTo != -1) {
-                    String eventName = line.substring(6, indexOfFrom -1);
-                    String eventFrom = line.substring(indexOfFrom +6, indexOfTo -1);
-                    String eventTo = line.substring(indexOfTo +4);
-                    Event event = new Event(eventName + " (from: " + eventFrom + " to: " + eventTo + ")", eventFrom, eventTo);
-                    numTasks = addTask(event, list, numTasks);
-                    printTaskAdded(event, numTasks);
-                }
-            }
-            System.out.println("____________________________________________________________");
-            line = in.nextLine();
-        }
-        System.out.println("""
-                ____________________________________________________________
-                 Bye. Hope to see you again soon!
-                ____________________________________________________________""");
+                 What can I do for you?""");
+        System.out.println(LINE);
     }
 
-    private static void printTaskAdded(Task task, int numTasks) {
+    private static void printEndMessage() {
+        System.out.println(LINE);
+        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println(LINE);
+    }
+
+    private static boolean isValidUserInput(String userInput) {
+        return !userInput.isEmpty() && !userInput.equals("bye");
+    }
+
+    private static String determineTaskType(String userInput) {
+        String[] splitKeyboardInput = userInput.split(" ");
+        return switch (splitKeyboardInput[0]) {
+            case "list" -> "list";
+            case "mark" -> "mark";
+            case "unmark" -> "unmark";
+            case "todo" -> "todo";
+            case "deadline" -> "deadline";
+            case "event" -> "event";
+            default -> "unknown";
+        };
+    }
+
+    private static void handleList() {
+        for (int i = 0; i < numTasks; i++) {
+            int taskNumber = i + 1;
+            System.out.println(taskNumber + ".[" + list[i].getTypeIcon() + "][" + list[i].getStatusIcon() + "] " + list[i].getDescription());
+        }
+    }
+
+    private static void handleMark(String userInput) {
+        try {
+            int taskNumber = Integer.parseInt(userInput.substring(5));
+            if (isValidTaskNumber(taskNumber)) {
+                Task task = list[taskNumber - 1];
+                task.markDone();
+                System.out.println("Nice! I've marked this task as done:\n[X] " + task.getDescription());
+            } else {
+                System.out.println("Invalid task number.");
+            }
+        } catch (Exception e) {
+            System.out.println("Add a valid task number to mark.");
+        }
+    }
+
+    private static void handleUnmark(String userInput) {
+        try {
+            int taskNumber = Integer.parseInt(userInput.substring(7));
+            if (isValidTaskNumber(taskNumber)) {
+                Task task = list[taskNumber - 1];
+                task.markNotDone();
+                System.out.println("OK, I've marked this task as not done yet:\n[ ] " + task.getDescription());
+            } else {
+                System.out.println("Invalid task number.");
+            }
+        } catch (Exception e) {
+            System.out.println("Add a task number to unmark.");
+        }
+    }
+
+    private static void handleDeadline(String userInput) {
+        int indexOfBy = userInput.indexOf(BY);
+        if (indexOfBy > 9) {
+            String deadlineName = userInput.substring(9, indexOfBy - 1);
+            String deadlineBy = userInput.substring(indexOfBy + 4);
+            Deadline deadline = new Deadline(deadlineName + " (by: " + deadlineBy + ")", deadlineBy);
+            addTask(deadline);
+            printTaskAdded(deadline);
+        } else {
+            System.out.println("Submit a Deadline using `deadline taskName /by taskBy` format.");
+        }
+    }
+
+    private static void handleEvent(String userInput) {
+        int indexOfFrom = userInput.indexOf(FROM);
+        int indexOfTo = userInput.indexOf(TO);
+        if (indexOfFrom > 6 && indexOfTo > indexOfFrom + 6) {
+            String eventName = userInput.substring(6, indexOfFrom - 1);
+            String eventFrom = userInput.substring(indexOfFrom + 6, indexOfTo - 1);
+            String eventTo = userInput.substring(indexOfTo + 4);
+            Event event = new Event(eventName + " (from: " + eventFrom + " to: " + eventTo + ")", eventFrom, eventTo);
+            addTask(event);
+            printTaskAdded(event);
+        } else {
+            System.out.println("Submit an Event using /from and /to format.");
+        }
+    }
+
+    private static void handleTodo(String userInput) {
+        if (userInput.length() > 5) {
+            Task task = new Task(userInput.substring(5));
+            addTask(task);
+            printTaskAdded(task);
+        } else {
+            System.out.println("Add a task name to todo.");
+        }
+    }
+
+    private static void printTaskAdded(Task task) {
         System.out.println("Got it. I've added this task:");
         System.out.println("    [" + task.getTypeIcon() + "][" + task.getStatusIcon()+"] " + task.getDescription());
         System.out.println("Now you have " + numTasks + " tasks in the list.");
     }
 
-    private static int addTask(Task task, Task[] list, int numTasks) {
+    private static void addTask(Task task) {
         list[numTasks] = task;
-        return numTasks+1;
+        numTasks += 1;
     }
 
-    private static boolean isValidTaskNumber(int taskNumber, int numTasks) {
+    private static boolean isValidTaskNumber(int taskNumber) {
         return taskNumber > 0 && taskNumber <= numTasks;
+    }
+
+    public static void main(String[] args) {
+        printStartMessage();
+        String userInput = input.nextLine();
+        while (isValidUserInput(userInput)) {
+            System.out.println(LINE);
+            String taskType = determineTaskType(userInput);
+
+            switch (taskType) {
+            case "list":
+                handleList();
+                break;
+            case "mark":
+                handleMark(userInput);
+                break;
+            case "unmark":
+                handleUnmark(userInput);
+                break;
+            case "todo":
+                handleTodo(userInput);
+                break;
+            case "deadline":
+                handleDeadline(userInput);
+                break;
+            case "event":
+                handleEvent(userInput);
+                break;
+            default:
+                System.out.println("Invalid task type.");
+            }
+
+            System.out.println(LINE);
+            userInput = input.nextLine();
+        }
+        printEndMessage();
     }
 }
