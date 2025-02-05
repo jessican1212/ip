@@ -45,7 +45,10 @@ public class Canelo {
     private static void handleList() {
         for (int i = 0; i < numTasks; i++) {
             int taskNumber = i + 1;
-            System.out.println(taskNumber + ".[" + list[i].getTypeIcon() + "][" + list[i].getStatusIcon() + "] " + list[i].getDescription());
+            String typeIcon = list[i].getTypeIcon();
+            String statusIcon = list[i].getStatusIcon();
+            String description = list[i].getDescription();
+            System.out.println(taskNumber + ".[" + typeIcon + "][" + statusIcon + "] " + description);
         }
     }
 
