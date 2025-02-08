@@ -60,91 +60,65 @@ public class Canelo {
         }
     }
 
-    private static void handleMark(String userInput) {
-        try {
-            if (userInput.length() <= MINIMUM_MARK_LENGTH) {
-                throw new CaneloException("Please add a task number to mark.");
-            }
-            int taskNumber = Integer.parseInt(userInput.substring(MINIMUM_MARK_LENGTH));
-            if (isInvalidTaskNumber(taskNumber)) {
-                throw new CaneloException("Please input a valid task number.");
-            }
-            Task task = list[taskNumber - 1];
-            task.markDone();
-            System.out.println("Nice! I've marked this task as done:\n[X] " + task.getDescription());
-        } catch (CaneloException e) {
-            System.out.println(e.getMessage());
-        } catch (NumberFormatException e) {
-            System.out.println("Add a task number to mark.");
+    private static void handleMark(String userInput) throws CaneloException {
+        if (userInput.length() <= MINIMUM_MARK_LENGTH) {
+            throw new CaneloException("Please add a task number to mark.");
         }
+        int taskNumber = Integer.parseInt(userInput.substring(MINIMUM_MARK_LENGTH));
+        if (isInvalidTaskNumber(taskNumber)) {
+            throw new CaneloException("Please input a valid task number between 1 and " + numTasks + ".");
+        }
+        Task task = list[taskNumber - 1];
+        task.markDone();
+        System.out.println("Nice! I've marked this task as done:\n[X] " + task.getDescription());
     }
 
-    private static void handleUnmark(String userInput) {
-        try {
-            if (userInput.length() <= MINIMUM_UNMARK_LENGTH) {
-                throw new CaneloException("Please add a task number to unmark.");
-            }
-            int taskNumber = Integer.parseInt(userInput.substring(MINIMUM_UNMARK_LENGTH));
-            if (isInvalidTaskNumber(taskNumber)) {
-                throw new CaneloException("Please input a valid task number.");
-            }
-            Task task = list[taskNumber - 1];
-            task.markNotDone();
-            System.out.println("OK, I've marked this task as not done yet:\n[ ] " + task.getDescription());
-        } catch (CaneloException e) {
-            System.out.println(e.getMessage());
-        } catch (NumberFormatException e) {
-            System.out.println("Add a task number to unmark.");
+    private static void handleUnmark(String userInput) throws CaneloException {
+        if (userInput.length() <= MINIMUM_UNMARK_LENGTH) {
+            throw new CaneloException("Please add a task number to unmark.");
         }
+        int taskNumber = Integer.parseInt(userInput.substring(MINIMUM_UNMARK_LENGTH));
+        if (isInvalidTaskNumber(taskNumber)) {
+            throw new CaneloException("Please input a valid task number.");
+        }
+        Task task = list[taskNumber - 1];
+        task.markNotDone();
+        System.out.println("OK, I've marked this task as not done yet:\n[ ] " + task.getDescription());
     }
 
-    private static void handleDeadline(String userInput) {
-        try {
-            int indexOfBy = userInput.indexOf(BY);
-            if (indexOfBy <= MINIMUM_DEADLINE_LENGTH) {
-                throw new CaneloException("Submit a Deadline using `taskName /by taskBy` format.");
-            }
-            String deadlineName = userInput.substring(MINIMUM_DEADLINE_LENGTH, indexOfBy - 1);
-            String deadlineBy = userInput.substring(indexOfBy + DEADLINE_BY_LENGTH);
-            Deadline deadline = new Deadline(deadlineName + " (by: " + deadlineBy + ")", deadlineBy);
-            addTask(deadline);
-            printTaskAdded(deadline);
-        } catch (CaneloException e) {
-            System.out.println(e.getMessage());
+    private static void handleDeadline(String userInput) throws CaneloException {
+        int indexOfBy = userInput.indexOf(BY);
+        if (indexOfBy <= MINIMUM_DEADLINE_LENGTH) {
+            throw new CaneloException("Submit a Deadline using `taskName /by taskBy` format.");
         }
-
+        String deadlineName = userInput.substring(MINIMUM_DEADLINE_LENGTH, indexOfBy - 1);
+        String deadlineBy = userInput.substring(indexOfBy + DEADLINE_BY_LENGTH);
+        Deadline deadline = new Deadline(deadlineName + " (by: " + deadlineBy + ")", deadlineBy);
+        addTask(deadline);
+        printTaskAdded(deadline);
     }
 
-    private static void handleEvent(String userInput) {
-        try {
-            int indexOfFrom = userInput.indexOf(FROM);
-            int indexOfTo = userInput.indexOf(TO);
-            if (indexOfFrom <= MINIMUM_EVENT_LENGTH || indexOfTo <= MINIMUM_EVENT_LENGTH) {
-                throw new CaneloException("Submit an Event using /from and /to format.");
-            }
-            String eventName = userInput.substring(MINIMUM_EVENT_LENGTH, indexOfFrom - 1);
-            String eventFrom = userInput.substring(indexOfFrom + MINIMUM_EVENT_LENGTH, indexOfTo - 1);
-            String eventTo = userInput.substring(indexOfTo + EVENT_TO_LENGTH);
-            Event event = new Event(eventName + " (from: " + eventFrom + " to: " + eventTo + ")", eventFrom, eventTo);
-            addTask(event);
-            printTaskAdded(event);
-        } catch (CaneloException e) {
-            System.out.println(e.getMessage());
+    private static void handleEvent(String userInput) throws CaneloException {
+        int indexOfFrom = userInput.indexOf(FROM);
+        int indexOfTo = userInput.indexOf(TO);
+        if (indexOfFrom <= MINIMUM_EVENT_LENGTH || indexOfTo <= MINIMUM_EVENT_LENGTH) {
+            throw new CaneloException("Submit an Event using /from and /to format.");
         }
-
+        String eventName = userInput.substring(MINIMUM_EVENT_LENGTH, indexOfFrom - 1);
+        String eventFrom = userInput.substring(indexOfFrom + MINIMUM_EVENT_LENGTH, indexOfTo - 1);
+        String eventTo = userInput.substring(indexOfTo + EVENT_TO_LENGTH);
+        Event event = new Event(eventName + " (from: " + eventFrom + " to: " + eventTo + ")", eventFrom, eventTo);
+        addTask(event);
+        printTaskAdded(event);
     }
 
-    private static void handleTodo(String userInput) {
-        try {
-            if (userInput.length() <= MINIMUM_TODO_LENGTH) {
-                throw new CaneloException("Please input a task name for todo.");
-            }
-            Task task = new Task(userInput.substring(MINIMUM_TODO_LENGTH));
-            addTask(task);
-            printTaskAdded(task);
-        } catch (CaneloException e) {
-            System.out.println(e.getMessage());
+    private static void handleTodo(String userInput) throws CaneloException {
+        if (userInput.length() <= MINIMUM_TODO_LENGTH) {
+            throw new CaneloException("Please input a task name for todo.");
         }
+        Task task = new Task(userInput.substring(MINIMUM_TODO_LENGTH));
+        addTask(task);
+        printTaskAdded(task);
     }
 
     private static void printTaskAdded(Task task) {
@@ -194,6 +168,8 @@ public class Canelo {
                 }
             } catch (CaneloException e) {
                 System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println("Add a valid task number: " + userInput);
             }
 
             System.out.println(LINE);
