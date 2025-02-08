@@ -1,3 +1,5 @@
+package canelo;
+
 import java.util.Scanner;
 
 public class Canelo {
@@ -89,7 +91,7 @@ public class Canelo {
     private static void handleDeadline(String userInput) throws CaneloException {
         int indexOfBy = userInput.indexOf(BY);
         if (indexOfBy <= MINIMUM_DEADLINE_LENGTH) {
-            throw new CaneloException("Submit a Deadline using `taskName /by taskBy` format.");
+            throw new CaneloException("Submit a canelo.Deadline using `taskName /by taskBy` format.");
         }
         String deadlineName = userInput.substring(MINIMUM_DEADLINE_LENGTH, indexOfBy - 1);
         String deadlineBy = userInput.substring(indexOfBy + DEADLINE_BY_LENGTH);
@@ -102,7 +104,7 @@ public class Canelo {
         int indexOfFrom = userInput.indexOf(FROM);
         int indexOfTo = userInput.indexOf(TO);
         if (indexOfFrom <= MINIMUM_EVENT_LENGTH || indexOfTo <= MINIMUM_EVENT_LENGTH) {
-            throw new CaneloException("Submit an Event using /from and /to format.");
+            throw new CaneloException("Submit an canelo.Event using /from and /to format.");
         }
         String eventName = userInput.substring(MINIMUM_EVENT_LENGTH, indexOfFrom - 1);
         String eventFrom = userInput.substring(indexOfFrom + MINIMUM_EVENT_LENGTH, indexOfTo - 1);
