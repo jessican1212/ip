@@ -87,7 +87,6 @@ public class Canelo {
         } catch (IOException e) {
             System.out.println("Something went wrong when writing to Canelo File: " + e.getMessage());
         }
-        System.out.println("Nice! I've marked this task as done:\n[X] " + task.getDescription());
     }
 
     private static void handleUnmark(String userInput) throws CaneloException {
@@ -106,7 +105,6 @@ public class Canelo {
         } catch (IOException e) {
             System.out.println("Something went wrong when writing to Canelo File: " + e.getMessage());
         }
-        System.out.println("OK, I've marked this task as not done yet:\n[ ] " + task.getDescription());
     }
 
     private static void handleDeadline(String userInput) throws CaneloException {
@@ -153,10 +151,13 @@ public class Canelo {
             throw new CaneloException("Please input a valid task number between 1 and " + numTasks + ".");
         }
         Task taskToDelete = tasks.get(taskNumber - 1);
+        deleteTask(taskToDelete);
+        printTaskDeleted(taskToDelete);
+    }
+
+    private static void printTaskDeleted(Task task) {
         System.out.println("Noted. I've removed this task:");
-        System.out.println("    [" + taskToDelete.getTypeIcon() + "]["+taskToDelete.getStatusIcon() + "] "+taskToDelete.getDescription());
-        tasks.remove(taskToDelete);
-        numTasks -= 1;
+        System.out.println("    [" + task.getTypeIcon() + "]["+task.getStatusIcon() + "] "+task.getDescription());
         System.out.println("Now you have " + numTasks + " tasks in the list.");
     }
 
@@ -164,6 +165,16 @@ public class Canelo {
         System.out.println("Got it. I've added this task:");
         System.out.println("    [" + task.getTypeIcon() + "][" + task.getStatusIcon()+"] " + task.getDescription());
         System.out.println("Now you have " + numTasks + " tasks in the list.");
+    }
+
+    private static void deleteTask(Task task) {
+        tasks.remove(task);
+        numTasks -= 1;
+        try {
+            writeToCaneloFile();
+        } catch (IOException e) {
+            System.out.println("Something went wrong when writing to Canelo File: " + e.getMessage());
+        }
     }
 
     private static void addTask(Task task) {
@@ -179,7 +190,7 @@ public class Canelo {
     private static void writeToCaneloFile() throws IOException {
         FileWriter fw = new FileWriter(FILE_PATH, false);
         for (int i = 0; i < numTasks; i++) {
-            Task task = list[i];
+            Task task = tasks.get(i);
             fw.write(task.toSaveFormat() + System.lineSeparator());
         }
         fw.close();
@@ -219,7 +230,7 @@ public class Canelo {
         } else {
             newTask = new Task(splitSavedTask[2], false);
         }
-        list[numTasks] = newTask;
+        tasks.add(newTask);
         numTasks += 1;
     }
 
@@ -231,7 +242,7 @@ public class Canelo {
         } else {
             newDeadline = new Deadline(splitSavedDeadline[2], splitSavedDeadline[3], false);
         }
-        list[numTasks] = newDeadline;
+        tasks.add(newDeadline);
         numTasks += 1;
     }
 
@@ -243,7 +254,7 @@ public class Canelo {
         } else {
             newEvent = new Event(splitSavedEvent[2], splitSavedEvent[3], splitSavedEvent[4],false);
         }
-        list[numTasks] = newEvent;
+        tasks.add(newEvent);
         numTasks += 1;
     }
 
