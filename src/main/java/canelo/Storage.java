@@ -14,6 +14,15 @@ public class Storage {
         this.filePath = filePath;
     }
 
+    /**
+     * Loads tasks from a file specified by the file path into an ArrayList.
+     * The method reads the file and parses its contents, creating tasks based on the file's content.
+     * If the file does not exist, a new file is created, and an empty task list is returned.
+     *
+     * @return An {@link ArrayList} of {@link Task} objects representing the tasks loaded from the file.
+     * @throws CaneloException If there is an error related to the file format or loading tasks.
+     * @throws FileNotFoundException If the file path does not point to an existing file when scanning.
+     */
     public ArrayList<Task> load() throws CaneloException, FileNotFoundException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
@@ -45,6 +54,14 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Parses a todo task string and adds the corresponding task to the task list.
+     * The method extracts the task description and status from the
+     * saved format and creates a new {@link Task} object.
+     *
+     * @param savedTask The string representation of a todo task.
+     * @param tasks The list of tasks to which the loaded task will be added.
+     */
     private void loadTask(String savedTask, ArrayList<Task> tasks) {
         String[] splitSavedTask = savedTask.split(",,,");
         Task newTask;
@@ -56,6 +73,14 @@ public class Storage {
         tasks.add(newTask);
     }
 
+    /**
+     * Parses a deadline task string and adds the corresponding task to the task list.
+     * The method extracts the deadline description, by, and status from the
+     * saved format and creates a new {@link Deadline} object.
+     *
+     * @param savedDeadline The string representation of a deadline task.
+     * @param tasks The list of tasks to which the loaded task will be added.
+     */
     private void loadDeadline(String savedDeadline, ArrayList<Task> tasks) {
         String[] splitSavedDeadline = savedDeadline.split(",,,");
         Task newDeadline;
@@ -67,6 +92,14 @@ public class Storage {
         tasks.add(newDeadline);
     }
 
+    /**
+     * Parses an event task string and adds the corresponding task to the task list.
+     * The method extracts the event description, from, to, and status from the
+     * saved format and creates a new {@link Event} object.
+     *
+     * @param savedEvent The string representation of an event task.
+     * @param tasks The list of tasks to which the loaded task will be added.
+     */
     private void loadEvent(String savedEvent, ArrayList<Task> tasks) {
         String[] splitSavedEvent = savedEvent.split(",,,");
         Task newEvent;
@@ -78,6 +111,14 @@ public class Storage {
         tasks.add(newEvent);
     }
 
+    /**
+     * Writes the current task list to the storage file. Each task is
+     * converted into a string format using and written to the file,
+     * with each task on a new line.
+     *
+     * @param tasks The {@link TaskList} containing tasks to be saved.
+     * @throws IOException If an error occurs while writing to the file.
+     */
     public void writeToCaneloFile(TaskList tasks) throws IOException {
         FileWriter fw = new FileWriter(filePath, false);
         for (int i = 0; i < tasks.getNumTasks(); i++) {

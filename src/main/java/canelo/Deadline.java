@@ -13,6 +13,13 @@ public class Deadline extends Task {
         return "D";
     }
 
+    /**
+     * Converts the deadline task into a formatted string representation for saving to a file.
+     * The format includes the task type, status icon, description, start time, and end time,
+     * separated by a specific delimiter (",,,").
+     *
+     * @return A string representation of the deadline task in save format.
+     */
     @Override
     public String toSaveFormat() {
         return "D,,,"+getStatusIcon()+",,,"+getDescription()+",,,"+by;
