@@ -22,6 +22,12 @@ public class Canelo {
         parser = new Parser(tasks, ui, storage);
     }
 
+    /**
+     * Runs the main program loop, handling user input and executing commands.
+     * The program starts by printing a welcome message and then enters a loop
+     * where it continuously reads user input, processes commands via the parser,
+     * and prints responses until the user exits and an end message is displayed.
+     */
     public void run() {
         ui.printStartMessage();
         String userInput = ui.getUserInput();

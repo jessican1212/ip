@@ -29,6 +29,13 @@ public class Task {
         return "T";
     }
 
+    /**
+     * Converts the todo task into a formatted string representation for saving to a file.
+     * The format includes the task type, status icon, description, start time, and end time,
+     * separated by a specific delimiter (",,,").
+     *
+     * @return A string representation of the todo task in save format.
+     */
     public String toSaveFormat() {
         return "T,,,"+getStatusIcon()+",,,"+getDescription();
     }

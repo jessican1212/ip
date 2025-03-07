@@ -13,6 +13,10 @@ public class TaskList {
         this.tasks = new ArrayList<>(tasks);
     }
 
+    public Task getTask(int taskNumber) {
+        return tasks.get(taskNumber);
+    }
+
     public void addTask(Task task) {
         tasks.add(task);
     }
@@ -21,6 +25,13 @@ public class TaskList {
         tasks.remove(task);
     }
 
+    public int getNumTasks() {
+        return tasks.size();
+    }
+
+    /**
+     * Prints all tasks in the TaskList in the form of [typeIcon][statusIcon] taskDescription.
+     */
     public void listTasks() {
         if (tasks.isEmpty()) {
             System.out.println("No tasks in list.");
@@ -36,16 +47,13 @@ public class TaskList {
         }
     }
 
-    public int getNumTasks() {
-        return tasks.size();
-    }
-
+    /**
+     * Checks whether an integer is a valid task number.
+     *
+     * @return {@code true} if the integer is invalid, {@code false} otherwise.
+     */
     public boolean isInvalidTaskNumber(int taskNumber) {
         return taskNumber <= 0 || taskNumber > tasks.size();
-    }
-
-    public Task getTask(int taskNumber) {
-        return tasks.get(taskNumber);
     }
 }
 

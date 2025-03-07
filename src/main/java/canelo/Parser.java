@@ -28,10 +28,24 @@ public class Parser {
         this.storage = storage;
     }
 
+    /**
+     * Checks whether the given user input is valid for continuing the program.
+     * The input is considered invalid if it equals "bye" or "q", which are
+     * commands to exit the program.
+     *
+     * @param userInput A string entered by the user.
+     * @return {@code true} if the input is not an exit command, {@code false} otherwise.
+     */
     public boolean isValidUserInput(String userInput) {
         return !userInput.equals("bye") && !userInput.equals("q");
     }
 
+    /**
+     * Parses the given input and executes instructions for given task type that
+     * was entered by the user.
+     *
+     * @param userInput A string entered by the user.
+     */
     public void handleCommand(String userInput) {
         String[] splitKeyboardInput = userInput.split(" ");
         String taskType = splitKeyboardInput[0];
@@ -72,10 +86,23 @@ public class Parser {
         }
     }
 
+    /**
+     * Prints all tasks in the TaskList in the form of [typeIcon][statusIcon] taskDescription.
+     */
     private void handleList() {
         tasks.listTasks();
     }
 
+    /**
+     * Marks a specified task as done based on user input.
+     * The method extracts the task number from the input, validates it,
+     * and updates the task's status if valid. It then saves the updated
+     * task list to storage.
+     *
+     * @param userInput The input string containing the mark command and task number.
+     * @throws CaneloException If the input does not include a valid task number
+     * or if the task number is out of range.
+     */
     private void handleMark(String userInput) throws CaneloException {
         if (userInput.length() <= MINIMUM_MARK_LENGTH) {
             throw new CaneloException("Please add a task number to mark.");
@@ -94,6 +121,16 @@ public class Parser {
         }
     }
 
+    /**
+     * Marks a specified task as not done based on user input.
+     * The method extracts the task number from the input, validates it,
+     * and updates the task's status if valid. It then saves the updated
+     * task list to storage.
+     *
+     * @param userInput The input string containing the mark command and task number.
+     * @throws CaneloException If the input does not include a valid task number
+     * or if the task number is out of range.
+     */
     private void handleUnmark(String userInput) throws CaneloException {
         if (userInput.length() <= MINIMUM_UNMARK_LENGTH) {
             throw new CaneloException("Please add a task number to unmark.");
@@ -112,6 +149,15 @@ public class Parser {
         }
     }
 
+    /**
+     * Handles the addition of a new todo task.
+     * Extracts the task description from user input, creates a new {@link Task}
+     * object, and adds it to the task list.
+     *
+     * @param userInput The input string containing the todo command and task description.
+     * @throws CaneloException If the task description is missing.
+     * @throws IOException If an error occurs while saving the updated task list to storage.
+     */
     private void handleTodo(String userInput) throws CaneloException, IOException {
         if (userInput.length() <= MINIMUM_TODO_LENGTH) {
             throw new CaneloException("Please input a task name for todo.");
@@ -120,6 +166,15 @@ public class Parser {
         handleAddTask(task);
     }
 
+    /**
+     * Handles the addition of a new deadline task.
+     * Extracts the deadline description and by from user input, creates a new
+     * {@link Deadline} object, and adds it to the task list.
+     *
+     * @param userInput The input string containing the deadline command, description, and by.
+     * @throws CaneloException If the deadline description and by are missing.
+     * @throws IOException If an error occurs while saving the updated task list to storage.
+     */
     private void handleDeadline(String userInput) throws CaneloException, IOException {
         int indexOfBy = userInput.indexOf(BY);
         if (indexOfBy <= MINIMUM_DEADLINE_LENGTH) {
@@ -131,6 +186,15 @@ public class Parser {
         handleAddTask(deadline);
     }
 
+    /**
+     * Handles the addition of a new event task.
+     * Extracts the event description, from, and to from user input, creates a new
+     * {@link Event} object, and adds it to the task list.
+     *
+     * @param userInput The input string containing the event command, description, from, and to.
+     * @throws CaneloException If the event description, from, and to are missing.
+     * @throws IOException If an error occurs while saving the updated task list to storage.
+     */
     private void handleEvent(String userInput) throws CaneloException, IOException {
         int indexOfFrom = userInput.indexOf(FROM);
         int indexOfTo = userInput.indexOf(TO);
@@ -144,13 +208,28 @@ public class Parser {
         handleAddTask(event);
     }
 
+    /**
+     * Adds a new task to the task list, displays a confirmation message,
+     * and saves the updated task list to storage.
+     *
+     * @param task The {@link Task} object to be added.
+     * @throws IOException If an error occurs while saving the updated task list to storage.
+     */
     private void handleAddTask(Task task) throws IOException {
         tasks.addTask(task);
         ui.printTaskAdded(task, tasks.getNumTasks());
         storage.writeToCaneloFile(tasks);
     }
 
-    public void handleDelete(String userInput) throws CaneloException, IOException {
+    /**
+     * Deletes a specified task number from the task list, displays a confirmation
+     * message, and saves the updated task list to storage.
+     *
+     * @param userInput The input string containing the delete command and task number to delete.
+     * @throws CaneloException If the task number is missing from the input.
+     * @throws IOException If an error occurs while saving the updated task list to storage.
+     */
+    private void handleDelete(String userInput) throws CaneloException, IOException {
         if (userInput.length() <= MINIMUM_DELETE_LENGTH) {
             throw new CaneloException("Please add a task number to delete.");
         }
@@ -164,7 +243,13 @@ public class Parser {
         storage.writeToCaneloFile(tasks);
     }
 
-    public void handleFind(String userInput) throws CaneloException {
+    /**
+     * Prints all tasks from task list that contain a specified search word from the user input.
+     *
+     * @param userInput The input string containing the find command and a search word.
+     * @throws CaneloException If the search word is missing from the input.
+     */
+    private void handleFind(String userInput) throws CaneloException {
         if (userInput.length() <= MINIMUM_FIND_LENGTH) {
             throw new CaneloException("Please add a search word to find.");
         }
