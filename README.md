@@ -1,26 +1,106 @@
-# Duke project template
+# Canelo
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Canelo is an interactive chatbot and task tracker program.
 
-## Setting up in Intellij
+## Features
 
-Prerequisites: JDK 17, update Intellij to the most recent version.
+### Notes about the command format
+- Words in `UPPER_CASE` are the parameters to be supplied by the user.
+  e.g. in `todo DESCRIPTION`, `DESCRIPTION` is a parameter which can be used as `todo buy book`.
+- Parameters must be in the specified order.
+- Extraneous parameters for commands that do not take in parameters (such as `list`) will be ignored.
+  e.g. if the command specifies `list 123`, it will be interpreted as `list`.
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+###  Showing all tasks in the task list: `list`
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+Prints out all tasks in the task list.
+
+Format: `list`
+
+### Adding todo task: `todo`
+
+Adds a todo task to the task list.
+
+Format: `todo DESCRIPTION`
+
+Examples:
+- `todo pilates`
+- `todo pay electricity bill`
+
+### Adding deadline task: `deadline`
+
+Adds a deadline task to the task list.
+
+Format: `deadline DESCRIPTION /by BY`
+
+Examples:
+- `deadline finish homework /by Friday 11:59pm`
+
+### Adding event task: `event`
+
+Adds an event task to the task list.
+
+Format: `event DESCRIPTION /from FROM /to TO`
+
+Examples:
+- `event birthday dinner /from 6pm /to 8pm`
+
+### Marking a task as done: `mark`
+
+Marks the specified task as done.
+
+Format: `mark INDEX`
+- Marks the task at the specified INDEX as done.
+- The index refers to the index number shown in the displayed task list.
+- The index must be a positive integer 1, 2, 3, …​
+
+Examples:
+- `mark 3`
+
+### Marking a task as not done: `unmark`
+
+Marks the specified task as not done.
+
+Format: `unmark INDEX`
+- Marks the task at the specified INDEX as done.
+- The index refers to the index number shown in the displayed task list.
+- The index must be a positive integer 1, 2, 3, …​
+
+Examples:
+- `unmark 5`
+
+### Finding a task by search word: `find`
+
+Marks the specified task as not done.
+
+Format: `find SEARCHWORD`
+- The search is case-sensitive. e.g `buy` will not match `Buy`
+- The entire description is matched. e.g. `sun` will match `sunflower`
+- `SEARCHWORD` can be multiple words that are space-separated.
+
+Examples:
+- `find psychology`
+- `find library book`
+
+### Deleting a task: `delete`
+
+Deletes a specified task from the task list.
+
+Format: `delete INDEX`
+- Removes the task at the specified index from the task list.
+- The index refers to the index number shown in the displayed task list.
+- The index must be a positive integer 1, 2, 3, …​
+
+Examples:
+- `delete 2`
+
+### Exiting the program: `bye`
+
+Exits the chatbot.
+
+Format: `bye`
+
+### Saving the data
+
+Canelo data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+
