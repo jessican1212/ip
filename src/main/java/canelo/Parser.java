@@ -20,6 +20,7 @@ public class Parser {
     static final int MINIMUM_EVENT_LENGTH = 6;
     static final int EVENT_TO_LENGTH = 4;
     static final int MINIMUM_DELETE_LENGTH = 7;
+    static final int MINIMUM_FIND_LENGTH = 5;
 
     public Parser(TaskList taskList, Ui ui, Storage storage) {
         this.tasks = taskList;
@@ -57,6 +58,9 @@ public class Parser {
                 break;
             case "delete":
                 handleDelete(userInput);
+                break;
+            case "find":
+                handleFind(userInput);
                 break;
             default:
                 throw new CaneloException("Unknown task type.");
@@ -160,5 +164,18 @@ public class Parser {
         storage.writeToCaneloFile(tasks);
     }
 
+    public void handleFind(String userInput) throws CaneloException {
+        if (userInput.length() <= MINIMUM_FIND_LENGTH) {
+            throw new CaneloException("Please add a search word to find.");
+        }
+        String searchWord = userInput.substring(MINIMUM_FIND_LENGTH);
+        ui.printMessage("Here are the matching tasks in your list:");
+        for (int i = 0; i < tasks.getNumTasks(); i++) {
+            Task task = tasks.getTask(i);
+            if (task.getDescription().contains(searchWord)) {
+                ui.printMessage("   [" + task.getTypeIcon() + "]["+task.getStatusIcon()+"] " + task.getDescription());
+            }
+        }
+    }
 }
 

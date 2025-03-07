@@ -36,10 +36,6 @@ public class TaskList {
         }
     }
 
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
-
     public int getNumTasks() {
         return tasks.size();
     }
