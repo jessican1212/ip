@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * Manages the loading and saving of tasks to a file.
+ * This class is responsible for reading from and writing to the Canelo data file.
+ */
 public class Storage {
     private final String filePath;
 

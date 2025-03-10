@@ -2,6 +2,10 @@ package canelo;
 
 import java.util.Scanner;
 
+/**
+ * Handles user interaction, including printing messages and getting user input.
+ * This class manages all input/output operations for the program.
+ */
 public class Ui {
     private final Scanner scanner;
     static final String LINE = "____________________________________________________________";
@@ -10,6 +14,9 @@ public class Ui {
         scanner = new Scanner(System.in);
     }
 
+    /**
+     * Prints a start message when the program begins.
+     */
     public void printStartMessage() {
         printLine();
         System.out.println("""
@@ -18,14 +25,25 @@ public class Ui {
         printLine();
     }
 
+    /**
+     * Retrieves user input from the console.
+     *
+     * @return The command entered by the user.
+     */
     public String getUserInput() {
         return scanner.nextLine();
     }
 
+    /**
+     * Displays an error message if the tasks fail to load from storage.
+     */
     public void showLoadingError() {
         System.out.println("Something went wrong when loading tasks.");
     }
 
+    /**
+     * Prints a message indicating that the program is exiting.
+     */
     public void printEndMessage() {
         printLine();
         System.out.println("Bye. Hope to see you again soon!");
@@ -36,6 +54,9 @@ public class Ui {
         System.out.println(message);
     }
 
+    /**
+     * Prints a line separator for better readability.
+     */
     public void printLine() {
         System.out.println(LINE);
     }

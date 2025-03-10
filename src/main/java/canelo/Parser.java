@@ -2,6 +2,11 @@ package canelo;
 
 import java.io.IOException;
 
+/**
+ * Handles parsing of user commands and delegates the execution of tasks.
+ * This class is responsible for interpreting user input and calling
+ * appropriate methods in other classes to execute commands.
+ */
 public class Parser {
 
     private TaskList tasks;
@@ -30,18 +35,18 @@ public class Parser {
 
     /**
      * Checks whether the given user input is valid for continuing the program.
-     * The input is considered invalid if it equals "bye" or "q", which are
-     * commands to exit the program.
+     * The input is considered invalid if it equals "bye", which is the
+     * command to exit the program.
      *
      * @param userInput A string entered by the user.
      * @return {@code true} if the input is not an exit command, {@code false} otherwise.
      */
     public boolean isValidUserInput(String userInput) {
-        return !userInput.equals("bye") && !userInput.equals("q");
+        return !userInput.equals("bye");
     }
 
     /**
-     * Parses the given input and executes instructions for given task type that
+     * Parses the given input and executes instructions for a given task type that
      * was entered by the user.
      *
      * @param userInput A string entered by the user.

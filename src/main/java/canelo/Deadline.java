@@ -1,5 +1,9 @@
 package canelo;
 
+/**
+ * Represents a deadline task with a due date.
+ * This class extends the Task class and includes a due date for the task.
+ */
 public class Deadline extends Task {
     protected String by;
 

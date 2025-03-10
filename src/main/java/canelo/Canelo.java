@@ -2,6 +2,10 @@ package canelo;
 
 import java.io.FileNotFoundException;
 
+/**
+ * The main class that initializes and runs the task manager.
+ * This class sets up dependencies and manages the overall program flow.
+ */
 public class Canelo {
     private static final String FILE_PATH = "caneloData.txt";
 

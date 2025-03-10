@@ -2,6 +2,10 @@ package canelo;
 
 import java.util.ArrayList;
 
+/**
+ * This class manages a list of tasks and provides methods to add, remove,
+ * and retrieve tasks in the list.
+ */
 public class TaskList {
     private ArrayList<Task> tasks;
 

@@ -1,5 +1,9 @@
 package canelo;
 
+/**
+ * Represents a todo task in the task manager.
+ * A todo task has a description and a completion status.
+ */
 public class Task {
     protected String description;
     protected boolean isDone;

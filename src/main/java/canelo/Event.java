@@ -1,5 +1,9 @@
 package canelo;
 
+/**
+ * Represents an event task with a start and end time.
+ * This class extends the Task class and includes additional details about event timing.
+ */
 public class Event extends Task {
     protected String from;
     protected String to;
